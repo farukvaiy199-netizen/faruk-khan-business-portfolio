@@ -343,6 +343,9 @@ body{background:radial-gradient(80% 600px at 50% 0%,#0f2150 0%,transparent 100%)
   .slide .cap b{font-size:21px}
   .slide .cap span{font-size:13px;max-width:78%}
 }
+
+.shot{height:160px}
+.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;z-index:2;background:#0a1535}
 </style>
 </head>
 <body>
@@ -454,7 +457,7 @@ function renderSite(){
   if(sh.facts!==false && c.facts.length) S.push(card('s-facts','ব্যক্তিগত তথ্য','person',`<div class="facts">${c.facts.map(f=>`<div class="fact"><small>${esc(f.k)}</small><span>${esc(f.v)}</span></div>`).join('')}</div>`));
   if(sh.services!==false && c.services.length) S.push(card('s-services','আমি যা করি','bag',`<div class="services">${c.services.map(s=>`<div class="svc"><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></div>`).join('')}</div>`));
   if(sh.skills!==false && c.skills.length) S.push(card('skills','দক্ষতা','star',`<div class="skill-grid${skillsSeen?' in':''}">${c.skills.map(s=>{const v=Math.max(0,Math.min(100,+s.pct||0));return `<div class="sk"><header>${esc(s.name)}<span>${v}%</span></header><div class="bar"><i style="--v:${v}%"></i></div></div>`}).join('')}</div>`));
-  if(sh.projects!==false && c.projects.length) S.push(card('s-projects','আমার প্রজেক্ট','code',`<div class="projects">${c.projects.map((x,i)=>`<a class="proj" href="${esc(href({url:x.url}))}"${ext(x.url)}><div class="shot ${x.img?'img':['a','b','c'][i%3]}"${x.img?` style="background-image:url('${esc(x.img)}')"`:''}></div><div class="meta"><b>${esc(x.title)}</b><small>${esc(x.tag)}</small></div></a>`).join('')}</div>`));
+  if(sh.projects!==false && c.projects.length) S.push(card('s-projects','আমার প্রজেক্ট','code',`<div class="projects">${c.projects.map((x,i)=>{const u=(x.url||'').trim();const src=x.img||(/^https?:/i.test(u)?'https://s.wordpress.com/mshots/v1/'+encodeURIComponent(u)+'?w=900&h=560':'');return `<a class="proj" href="${esc(href({url:x.url}))}"${ext(x.url)}><div class="shot ${['a','b','c'][i%3]}">${src?`<img src="${esc(src)}" alt="${esc(x.title)}" loading="lazy" onerror="this.remove()">`:''}</div><div class="meta"><b>${esc(x.title)}</b><small>${esc(x.tag)}</small></div></a>`}).join('')}</div>`));
   const tl = a => `<ul class="tl">${a.map(e=>`<li class="${e.now?'now':''}"><small>${esc(e.date)}</small><b>${esc(e.title)}</b><span>${esc(e.sub)}</span></li>`).join('')}</ul>`;
   const showExp = sh.exp!==false && c.exp.length, showEdu = sh.edu!==false && c.edu.length;
   if(showExp||showEdu) S.push(`<div class="two${showExp&&showEdu?'':' single'}">${showExp?card('s-exp','অভিজ্ঞতা','brief',tl(c.exp)):''}${showEdu?card('s-edu','শিক্ষা','grad',tl(c.edu)):''}</div>`);
